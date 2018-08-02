@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AssetManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Assignments" Relationship="AssetManagementModel.FK_Assignments_Employees" FromRole="Employee" ToRole="Assignment" />
+  </EntityType>
+  <EntityType Name="Need">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Requester" Type="Int32" />
+    <Property Name="RequestDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="PurchaseOrders" Relationship="AssetManagementModel.FK_PurchaseOrder_Needs" FromRole="Need" ToRole="PurchaseOrder" />
+  </EntityType>
+  <EntityType Name="Status">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Hardwares" Relationship="AssetManagementModel.FK_Hardware_Status" FromRole="Status" ToRole="Hardware" />
+    <NavigationProperty Name="Softwares" Relationship="AssetManagementModel.FK_Software_Status" FromRole="Status" ToRole="Software" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="UpgradeAndMaintain">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="HardwareID" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Date" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Hardware" Relationship="AssetManagementModel.FK_UpgradeAndMaintain_Hardware" FromRole="UpgradeAndMaintain" ToRole="Hardware" />
+  </EntityType>
+  <EntityContainer Name="AssetManagementEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Employees" EntityType="Self.Employee" />
+    <EntitySet Name="Needs" EntityType="Self.Need" />
+    <EntitySet Name="Status" EntityType="Self.Status" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="UpgradeAndMaintains" EntityType="Self.UpgradeAndMaintain" />
+    <EntitySet Name="Hardwares" EntityType="AssetManagementModel.Hardware" />
+    <AssociationSet Name="FK_Hardware_Status" Association="AssetManagementModel.FK_Hardware_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Hardware" EntitySet="Hardwares" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UpgradeAndMaintain_Hardware" Association="AssetManagementModel.FK_UpgradeAndMaintain_Hardware">
+      <End Role="Hardware" EntitySet="Hardwares" />
+      <End Role="UpgradeAndMaintain" EntitySet="UpgradeAndMaintains" />
+    </AssociationSet>
+    <EntitySet Name="Types" EntityType="AssetManagementModel.Type" />
+    <EntitySet Name="UpdatesAndDependencies" EntityType="AssetManagementModel.UpdatesAndDependency" />
+    <AssociationSet Name="FK_Hardware_Type" Association="AssetManagementModel.FK_Hardware_Type">
+      <End Role="Type" EntitySet="Types" />
+      <End Role="Hardware" EntitySet="Hardwares" />
+    </AssociationSet>
+    <EntitySet Name="PurchaseOrders" EntityType="AssetManagementModel.PurchaseOrder" />
+    <AssociationSet Name="FK_Hardware_PurchaseOrder" Association="AssetManagementModel.FK_Hardware_PurchaseOrder">
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+      <End Role="Hardware" EntitySet="Hardwares" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseOrder_Needs" Association="AssetManagementModel.FK_PurchaseOrder_Needs">
+      <End Role="Need" EntitySet="Needs" />
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+    </AssociationSet>
+    <EntitySet Name="Assignments" EntityType="AssetManagementModel.Assignment" />
+    <EntitySet Name="Softwares" EntityType="AssetManagementModel.Software" />
+    <AssociationSet Name="FK_Assignments_Employees" Association="AssetManagementModel.FK_Assignments_Employees">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Assignment" EntitySet="Assignments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Assignments_Hardware" Association="AssetManagementModel.FK_Assignments_Hardware">
+      <End Role="Hardware" EntitySet="Hardwares" />
+      <End Role="Assignment" EntitySet="Assignments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Assignments_Software" Association="AssetManagementModel.FK_Assignments_Software">
+      <End Role="Software" EntitySet="Softwares" />
+      <End Role="Assignment" EntitySet="Assignments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Assignments_Software1" Association="AssetManagementModel.FK_Assignments_Software1">
+      <End Role="Software" EntitySet="Softwares" />
+      <End Role="Assignment" EntitySet="Assignments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Software_PurchaseOrder1" Association="AssetManagementModel.FK_Software_PurchaseOrder1">
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+      <End Role="Software" EntitySet="Softwares" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Software_Status" Association="AssetManagementModel.FK_Software_Status">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Software" EntitySet="Softwares" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Hardware">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Type" Type="Int32" />
+    <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ServiceTag" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="POID" Type="Int32" />
+    <Property Name="LabelName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="StatusID" Type="Int32" />
+    <NavigationProperty Name="Status" Relationship="AssetManagementModel.FK_Hardware_Status" FromRole="Hardware" ToRole="Status" />
+    <NavigationProperty Name="UpgradeAndMaintains" Relationship="AssetManagementModel.FK_UpgradeAndMaintain_Hardware" FromRole="Hardware" ToRole="UpgradeAndMaintain" />
+    <NavigationProperty Name="Type1" Relationship="AssetManagementModel.FK_Hardware_Type" FromRole="Hardware" ToRole="Type" />
+    <NavigationProperty Name="PurchaseOrder" Relationship="AssetManagementModel.FK_Hardware_PurchaseOrder" FromRole="Hardware" ToRole="PurchaseOrder" />
+    <NavigationProperty Name="Assignments" Relationship="AssetManagementModel.FK_Assignments_Hardware" FromRole="Hardware" ToRole="Assignment" />
+  </EntityType>
+  <Association Name="FK_Hardware_Status">
+    <End Type="AssetManagementModel.Status" Role="Status" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.Hardware" Role="Hardware" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Hardware">
+        <PropertyRef Name="StatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UpgradeAndMaintain_Hardware">
+    <End Type="AssetManagementModel.Hardware" Role="Hardware" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.UpgradeAndMaintain" Role="UpgradeAndMaintain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hardware">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UpgradeAndMaintain">
+        <PropertyRef Name="HardwareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Type">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Hardwares" Relationship="AssetManagementModel.FK_Hardware_Type" FromRole="Type" ToRole="Hardware" />
+  </EntityType>
+  <EntityType Name="UpdatesAndDependency">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FK_Hardware_Type">
+    <End Type="AssetManagementModel.Type" Role="Type" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.Hardware" Role="Hardware" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Hardware">
+        <PropertyRef Name="Type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PurchaseOrder">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PO_Number" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="NeedsID" Type="Int32" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="Hardwares" Relationship="AssetManagementModel.FK_Hardware_PurchaseOrder" FromRole="PurchaseOrder" ToRole="Hardware" />
+    <NavigationProperty Name="Need" Relationship="AssetManagementModel.FK_PurchaseOrder_Needs" FromRole="PurchaseOrder" ToRole="Need" />
+    <NavigationProperty Name="Softwares" Relationship="AssetManagementModel.FK_Software_PurchaseOrder1" FromRole="PurchaseOrder" ToRole="Software" />
+  </EntityType>
+  <Association Name="FK_Hardware_PurchaseOrder">
+    <End Type="AssetManagementModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.Hardware" Role="Hardware" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseOrder">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Hardware">
+        <PropertyRef Name="POID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseOrder_Needs">
+    <End Type="AssetManagementModel.Need" Role="Need" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Need">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PurchaseOrder">
+        <PropertyRef Name="NeedsID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Assignment">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+    <Property Name="HardwareID" Type="Int32" />
+    <Property Name="SoftwareID" Type="Int32" />
+    <Property Name="VisioID" Type="Int32" />
+    <Property Name="StatusID" Type="Int32" />
+    <Property Name="Comment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Employee" Relationship="AssetManagementModel.FK_Assignments_Employees" FromRole="Assignment" ToRole="Employee" />
+    <NavigationProperty Name="Hardware" Relationship="AssetManagementModel.FK_Assignments_Hardware" FromRole="Assignment" ToRole="Hardware" />
+    <NavigationProperty Name="Software" Relationship="AssetManagementModel.FK_Assignments_Software" FromRole="Assignment" ToRole="Software" />
+    <NavigationProperty Name="Software1" Relationship="AssetManagementModel.FK_Assignments_Software1" FromRole="Assignment" ToRole="Software" />
+  </EntityType>
+  <EntityType Name="Software">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="POID" Type="Int32" />
+    <Property Name="StatusID" Type="Int32" />
+    <Property Name="LicenseNo" Type="Int32" />
+    <NavigationProperty Name="Assignments" Relationship="AssetManagementModel.FK_Assignments_Software" FromRole="Software" ToRole="Assignment" />
+    <NavigationProperty Name="Assignments1" Relationship="AssetManagementModel.FK_Assignments_Software1" FromRole="Software" ToRole="Assignment" />
+    <NavigationProperty Name="PurchaseOrder" Relationship="AssetManagementModel.FK_Software_PurchaseOrder1" FromRole="Software" ToRole="PurchaseOrder" />
+    <NavigationProperty Name="Status" Relationship="AssetManagementModel.FK_Software_Status" FromRole="Software" ToRole="Status" />
+  </EntityType>
+  <Association Name="FK_Assignments_Employees">
+    <End Type="AssetManagementModel.Employee" Role="Employee" Multiplicity="1" />
+    <End Type="AssetManagementModel.Assignment" Role="Assignment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Assignment">
+        <PropertyRef Name="EmployeeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Assignments_Hardware">
+    <End Type="AssetManagementModel.Hardware" Role="Hardware" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.Assignment" Role="Assignment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hardware">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Assignment">
+        <PropertyRef Name="HardwareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Assignments_Software">
+    <End Type="AssetManagementModel.Software" Role="Software" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.Assignment" Role="Assignment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Software">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Assignment">
+        <PropertyRef Name="SoftwareID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Assignments_Software1">
+    <End Type="AssetManagementModel.Software" Role="Software" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.Assignment" Role="Assignment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Software">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Assignment">
+        <PropertyRef Name="VisioID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Software_PurchaseOrder1">
+    <End Type="AssetManagementModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.Software" Role="Software" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseOrder">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Software">
+        <PropertyRef Name="POID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Software_Status">
+    <End Type="AssetManagementModel.Status" Role="Status" Multiplicity="0..1" />
+    <End Type="AssetManagementModel.Software" Role="Software" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Software">
+        <PropertyRef Name="StatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
