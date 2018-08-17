@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AssetManagement.Models;
+using AssetManagement.ViewModels;
 
 namespace AssetManagement.Controllers
 {
@@ -18,7 +19,24 @@ namespace AssetManagement.Controllers
         public ActionResult Index()
         {
             var softwares = db.Softwares.Include(s => s.PurchaseOrder).Include(s => s.Status);
-            return View(softwares.ToList());
+            List<SoftwareVM> softwareList = new List<SoftwareVM>();
+            foreach (Software s in softwares)
+            {
+                SoftwareVM sVM = new SoftwareVM();
+                sVM.ID = s.ID;
+                sVM.SoftwareName = s.Name;
+                sVM.TotalLicNo = s.LicenseNo;
+                sVM.PONumber = s.PurchaseOrder.PO_Number;
+                if (s.Name.Contains("Office"))
+                {
+                    sVM.UsedLicNo = db.Assignments.Where(a => a.SoftwareID == s.ID).Count();
+                } else if (s.Name.Contains("Visio"))
+                {
+                    sVM.UsedLicNo = db.Assignments.Where(a => a.VisioID == s.ID).Count();
+                }
+                 softwareList.Add(sVM);
+            }
+            return View(softwareList);
         }
 
         // GET: Softwares/Details/5
@@ -97,33 +115,7 @@ namespace AssetManagement.Controllers
             ViewBag.StatusID = new SelectList(db.Status, "ID", "Description", software.StatusID);
             return View(software);
         }
-
-        // GET: Softwares/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Software software = db.Softwares.Find(id);
-            if (software == null)
-            {
-                return HttpNotFound();
-            }
-            return View(software);
-        }
-
-        // POST: Softwares/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Software software = db.Softwares.Find(id);
-            db.Softwares.Remove(software);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
+      
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -131,6 +123,37 @@ namespace AssetManagement.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        // GET: Softwares/Usedlic/5
+        public ActionResult Usedlic(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            UsedlicVM usedliclVM = new UsedlicVM();
+            usedliclVM.SoftwareName = db.Softwares.Find(id).Name;
+            if (db.Softwares.Find(id).Name.Contains("Office"))
+            {
+                usedliclVM.UsedlicList = db.Assignments.Where(a => a.SoftwareID == id).Select(x => new UsedlicObj {
+                                                                                                       UserName = x.Employee.FirstName,
+                                                                                                       ComputerName = x.Hardware.LabelName
+                                                                                                       }).ToList();
+            }
+            else if (db.Softwares.Find(id).Name.Contains("Visio"))
+            {
+                usedliclVM.UsedlicList = db.Assignments.Where(a => a.VisioID == id).Select(x => new UsedlicObj {
+                                                                                                    UserName = x.Employee.FirstName,
+                                                                                                    ComputerName = x.Hardware.LabelName
+                                                                                                    }).ToList();
+            }
+            usedliclVM.UsedlicNo = usedliclVM.UsedlicList.Count();
+            if (usedliclVM.UsedlicList == null)
+            {
+                return HttpNotFound();
+            }
+            return View(usedliclVM);
         }
     }
 }

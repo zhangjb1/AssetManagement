@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Display Details";
+}
+
+<h2>Display Details</h2>
+
+@foreach (string strDetails in (List<string>)ViewData["Details"])
+{
+    @strDetails;<br /><br />
+}

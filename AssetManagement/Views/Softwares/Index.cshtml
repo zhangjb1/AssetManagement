@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AssetManagement.Models.Software>
+﻿@model IEnumerable<AssetManagement.ViewModels.SoftwareVM>
 
 @{
     ViewBag.Title = "Index";
@@ -13,19 +13,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Software Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.POID)
+            Total License
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LicenseNo)
+            Used License Number
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PurchaseOrder.PO_Number)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status.Description)
+            PO Number
         </th>
         <th></th>
     </tr>
@@ -33,24 +30,20 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.DisplayFor(modelItem => item.SoftwareName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.POID)
+            @Html.DisplayFor(modelItem => item.TotalLicNo)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LicenseNo)
+            @Html.ActionLink(item.UsedLicNo.ToString(), "Usedlic", "Softwares", new { id = item.ID }, null)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PurchaseOrder.PO_Number)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status.Description)
+            @Html.DisplayFor(modelItem => item.PONumber)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Details", "Details", new { id=item.ID })
         </td>
     </tr>
 }

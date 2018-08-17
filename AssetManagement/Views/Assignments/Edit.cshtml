@@ -17,35 +17,37 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.assignment.ID)
+        @Html.HiddenFor(model => model.assignment.EmployeeID)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.assignment.EmployeeID, "EmployeeID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">Name:</label>
             <div class="col-md-10">
-                @Html.DropDownList("EmployeeID", (IEnumerable<SelectListItem>)Model.employeeList, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.assignment.EmployeeID, "", new { @class = "text-danger" })
+                @Html.DisplayFor(model => model.assignment.Employee.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DisplayFor(model => model.assignment.Employee.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.assignment.Employee.FirstName, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.assignment.HardwareID, "HardwareID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">Computer Name:</label>
             <div class="col-md-10">
-                @Html.DropDownList("HardwareID", (IEnumerable<SelectListItem>)Model.computerList, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.assignment.HardwareID, (IEnumerable<SelectListItem>)Model.computerList, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.assignment.HardwareID, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.assignment.SoftwareID, "SoftwareID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">MS Office:</label>
             <div class="col-md-10">
-                @Html.DropDownList("SoftwareID", (IEnumerable<SelectListItem>)Model.msofficeList, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.assignment.SoftwareID, (IEnumerable<SelectListItem>)Model.msofficeList, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.assignment.SoftwareID, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.assignment.VisioID, "VisioID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">MS Visio:</label>
             <div class="col-md-10">
-                @Html.DropDownList("VisioID", (IEnumerable<SelectListItem>)Model.msvisioLst, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.assignment.VisioID, (IEnumerable<SelectListItem>)Model.msvisioLst, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.assignment.VisioID, "", new { @class = "text-danger" })
             </div>
         </div>

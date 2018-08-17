@@ -13,16 +13,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Employee.FirstName)
+            Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Hardware.Model)
+            Computer Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Software.Name)
+            MS Office
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.VisioID)
+            MS Visio
         </th>
         <th>
             @Html.DisplayNameFor(model => model.StatusID)
@@ -37,10 +37,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Employee.FirstName)
+            @Html.DisplayFor(modelItem => item.Employee.FirstName) @Html.DisplayFor(modelItem => item.Employee.LastName )
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Hardware.Model)
+            @Html.ActionLink(item.Hardware.LabelName, "Details", "Hardwares", new {id = item.Hardware.ID }, null)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Software.Name)
@@ -56,8 +56,7 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Details", "Details", new { id=item.ID })            
         </td>
     </tr>
 }

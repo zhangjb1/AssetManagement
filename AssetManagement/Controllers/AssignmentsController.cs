@@ -16,6 +16,17 @@ namespace AssetManagement.Controllers
         private AssetManagementEntities db = new AssetManagementEntities();
 
         // GET: Assignments
+        public ActionResult Test()
+        {
+            ViewData["Details"] = new List<String>
+            {
+                "akshay",
+                "Mumbai",
+                "12345",
+                "MCA"
+            };
+            return View();
+        }
         public ActionResult Index()
         {
             var assignments = db.Assignments.Include(a => a.Employee).Include(a => a.Hardware).Include(a => a.Software);
@@ -148,47 +159,21 @@ namespace AssetManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,EmployeeID,HardwareID,SoftwareID,VisioID,StatusID,Comment")] Assignment assignment)
+        public ActionResult Edit(AssignmentVM assignmentVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(assignment).State = EntityState.Modified;
+                db.Entry(assignmentVM.assignment).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FirstName", assignment.EmployeeID);
-            ViewBag.HardwareID = new SelectList(db.Hardwares, "ID", "Model", assignment.HardwareID);
-            ViewBag.SoftwareID = new SelectList(db.Softwares, "ID", "Name", assignment.SoftwareID);
-            ViewBag.VisioID = new SelectList(db.Softwares, "ID", "Name", assignment.VisioID);
-            return View(assignment);
+            //ViewBag.EmployeeID = new SelectList(db.Employees, "ID", "FirstName", assignment.EmployeeID);
+            //ViewBag.HardwareID = new SelectList(db.Hardwares, "ID", "Model", assignment.HardwareID);
+            //ViewBag.SoftwareID = new SelectList(db.Softwares, "ID", "Name", assignment.SoftwareID);
+            //ViewBag.VisioID = new SelectList(db.Softwares, "ID", "Name", assignment.VisioID);
+            return View(assignmentVM);
         }
-
-        // GET: Assignments/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Assignment assignment = db.Assignments.Find(id);
-            if (assignment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(assignment);
-        }
-
-        // POST: Assignments/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Assignment assignment = db.Assignments.Find(id);
-            db.Assignments.Remove(assignment);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
+       
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -1,0 +1,38 @@
+﻿@model AssetManagement.ViewModels.UsedlicVM
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>License Used:</h2>
+
+<p>
+    @Model.SoftwareName : @Model.UsedlicNo.ToString()
+</p>
+<table class="table">
+    <tr>
+        <th>
+            User Name
+        </th>
+        <th>
+            Computer Name
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model.UsedlicList) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ComputerName)
+        </td>
+    </tr>
+}
+
+</table>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

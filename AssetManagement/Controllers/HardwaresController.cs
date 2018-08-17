@@ -102,32 +102,6 @@ namespace AssetManagement.Controllers
             return View(hardware);
         }
 
-        // GET: Hardwares/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Hardware hardware = db.Hardwares.Find(id);
-            if (hardware == null)
-            {
-                return HttpNotFound();
-            }
-            return View(hardware);
-        }
-
-        // POST: Hardwares/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Hardware hardware = db.Hardwares.Find(id);
-            db.Hardwares.Remove(hardware);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
